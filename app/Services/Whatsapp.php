@@ -4,7 +4,7 @@ namespace App\Services;
 
 class Whatsapp {
     
-    public function send($phone, $body) {
+    public static function send($phone, $body) {
   
         $curl = curl_init();
         curl_setopt_array($curl, array(

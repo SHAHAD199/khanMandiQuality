@@ -3,28 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Services\Customers\GetCustomerService;
+use App\Services\Customers\PostCustomerService;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
+
+   private $getCustomerService;
+   private $postCustomerService;
+
+   public function __construct(GetCustomerService $getCustomerService, PostCustomerService $postCustomerService)
+   {
+      $this->getCustomerService  = $getCustomerService;
+      $this->postCustomerService = $postCustomerService;
+   }
     public function index(Request $request)
     {
-     $index =1;
-     if($request->start_at && $request->end_at)
-     {
-        $customers = Customer::whereHas('orders', function($q) use($request)
-        {
-           $q->whereBetween('order_date', [$request->start_at, $request->end_at]);
-        })->get();
-     }elseif($request->gender){
-        $customers = Customer::where('gender', $request->gender)->get();
-     }elseif($request->birthday){
-        $customers = Customer::where('birthday', $request->birthday)->get();
-     }
-     else {
-        $customers = Customer::get();
-     }
-      return view('reports.customers', compact('index', 'customers'));
+      return $this->getCustomerService->index($request);
     }
 
 

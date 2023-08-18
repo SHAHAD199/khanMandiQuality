@@ -2,54 +2,50 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Branch;
-use App\Models\Role;
 use App\Models\User;
+use App\Services\Users\GetUserService;
+use App\Services\Users\PostUserService;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+  
+    private $getUserService;
+    private $postUserService;
 
+    public function __construct(GetUserService $getUserService, PostUserService $postUserService)
+    {
+      $this->getUserService = $getUserService;
+      $this->postUserService = $postUserService;
+    } 
     public function index()
     {
-      $index = 1;
-      $users = User::get();
-      
-      return view('users.index', compact('index', 'users'));
+      return $this->getUserService->index();
     }
     
     public function create()
-    {
-        $roles = Role::get();
-        $branches = Branch::get();
-
-        return view('users.create', compact('roles', 'branches'));
+    {     
+        return $this->getUserService->create();
     }
 
     public function store(Request $request)
     {
-   
-       User::create($request->all());
-       return redirect(url('users'));
+       return $this->postUserService->store($request);
     }
 
     public function edit(User $user)
     {
-      $roles = Role::get();
-      $branches = Branch::get();
-       return view('users.edit', compact('user','roles','branches'));
+      return $this->getUserService->edit($user);
     }
 
     public function update(Request $request, User $user)
     {
-      $user->update($request->all());
-      return redirect(url('users'));
+      return $this->postUserService->update($request,$user);
     }
 
     public function delete(User $user)
     {
-      $user->delete();
-      return back();
+      return $this->postUserService->delete($user);
     }
 
    

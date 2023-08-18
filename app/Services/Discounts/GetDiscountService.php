@@ -1,0 +1,67 @@
+<?php 
+
+namespace App\Services\Discounts;
+
+use App\Models\Branch;
+use App\Models\Customer;
+use App\Models\Discount;
+use App\Models\Order;
+use Carbon\Carbon;
+
+class GetDiscountService 
+{
+    public function index( $request)
+    {
+        $index = 1;        
+        if($request->phone){
+        $discounts = Discount::whereHas('customer', function($q) use($request) 
+        {
+        $q->where('phone', $request->phone);
+        })->get();
+        return view('index' , compact('index', 'discounts'));      
+        }
+        else {
+            return view('index');
+        }
+    }
+
+    public function birthday()
+    {
+        $index = 1;
+        $customers = Customer::where('birthday', Carbon::today())->get();
+        return view('discounts.birthday', compact('index', 'customers'));
+    }
+
+
+    public function waiting_list($request)
+    {
+        $index = 1;
+        $branches = Branch::get();
+        $discount_value = [10,15,20,25,50,100];
+
+        $orders = ($request->branch_id && ($request->start_at && $request->end_at))
+         ?  Order::where('branch_id', $request->branch_id)
+         ->where('status',1)
+         ->whereBetween('order_date', [$request->start_at, $request->end_at])
+         ->whereHas('complaints')->get()
+
+         : (($request->branch_id) 
+         ? Order::where('branch_id', $request->branch_id)
+         ->where('status',1)
+         ->whereHas('complaints')->get()
+         : (($request->start_at && $request->end_at)
+
+         ? Order::whereBetween('order_date', [$request->start_at, $request->end_at])
+         ->where('status',1)
+         ->whereHas('complaints')->get()
+         : Order::whereHas('complaints')
+         ->where('status',1)
+         ->get()
+         )        
+    );
+ 
+        return view('discounts/waiting', compact('branches', 'index', 'orders', 'discount_value'));
+    }
+
+
+}

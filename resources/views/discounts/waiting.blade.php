@@ -46,6 +46,7 @@
          <th>#</th>
          <th>الرقم</th>
          <th>التاريخ</th>
+         <th>الفرع</th>
          <th>نوع الطلب</th>
          <th>الشكاوى</th>
          <th>قبول</th>
@@ -56,6 +57,7 @@
         <td>{{ $index++ }}</td>
         <td>{{ $order->customer->phone }}</td>
         <td>{{ $order->order_date }}</td>
+        <td>{{ $order->branch->name }}</td>
         <td>{{ $order->orderType->name }}</td>
         <td>
             @if($order->complaints)
@@ -69,7 +71,7 @@
                  @foreach($order->complaints as $complaint)
                  <tbody>
                  <td>{{ $complaint->department->name }}</td>
-                 <td>{{ $complaint->material }}</td>
+                 <td>{{ $complaint->metarial }}</td>
                  <td>{{ $complaint->complaint }}</td>
                  </tbody>
                  @endforeach

@@ -42,7 +42,7 @@ Route::controller(ExcelController::class)->group(function(){
 Route::controller(OrderController::class)->group(function(){
     Route::get('orders' , 'index');
     Route::get('orders/create/{order}','create');
-    Route::post('orders/store/{order}','store');
+    Route::post('orders/store/{order}','update');
     Route::get('orders/add-new/{order}','addNew');
     Route::post('orders/approval/{order}','approval');
     Route::post('orders/reject/{order}', 'reject');

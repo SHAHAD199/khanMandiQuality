@@ -2,26 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
+
+use App\Services\Roles\GetRoleService;
+use App\Services\Roles\PostRoleService;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
+
+    private $getRoleService;
+    private $postRoleService;
+    public function __construct(GetRoleService $getRoleService, PostRoleService $postRoleService)
+    {
+      $this->getRoleService = $getRoleService;
+      $this->postRoleService = $postRoleService;
+    }
+
     public function index()
     {
-      $index = 1;
-      $roles = Role::get();
-      return view('roles.index', compact('index','roles'));
+      return $this->getRoleService->index();
     }
 
     public function create()
     {
-       return view('roles.create');
+       return $this->getRoleService->create();
     }
+
     public function store(Request $request)
     {
-        $role = Role::create($request->all());
-        return redirect(url('roles'));
+      return $this->postRoleService->store($request);
     }
 
 }
