@@ -1,13 +1,17 @@
 <?php
 
-use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\DiscountController;
-use App\Http\Controllers\EmployeeReportController;
-use App\Http\Controllers\ExcelController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\ReportController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\{
+    CustomerController,
+    DiscountController,
+    DiscountReportsController,
+    EmployeeReportController,
+    ExcelController,
+    OrderController,
+    OrdersReportsController,    
+    RoleController,
+    UserController,
+};
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,20 +47,21 @@ Route::controller(OrderController::class)->group(function(){
     Route::get('orders' , 'index');
     Route::get('orders/create/{order}','create');
     Route::post('orders/store/{order}','update');
-    Route::get('orders/add-new/{order}','addNew');
     Route::post('orders/approval/{order}','approval');
     Route::post('orders/reject/{order}', 'reject');
 });
 
 
-Route::controller(ReportController::class)->group(function(){
+Route::controller(OrdersReportsController::class)->group(function(){
     Route::get('delivary','delivary');
     Route::get('takeaway','takeaway');
     Route::get('departments','departments');
+});
+
+Route::controller(DiscountReportsController::class)->group(function(){
     Route::get('approval_discounts','approval_discounts');
     Route::get('reject_discounts', 'reject_discounts');
     Route::get('used_discounts', 'used_discounts');
- 
 });
 
 Route::controller(CustomerController::class)->group(function(){
