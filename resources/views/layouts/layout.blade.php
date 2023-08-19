@@ -48,6 +48,8 @@
           <a href="{{ url('excel/add') }}" class="sub-item">اضافة طلبات الامس</a>
           <a href="{{ url('orders') }}" class="sub-item">طلبات الامس</a>
           <a href="{{ url('waiting_list') }}" class="sub-item">قائمة الانتظار</a>
+          <a href="{{ url('calls') }}" class="sub-item">المكالمات الصادرة</a>
+
         </div>
        <!-- dropdown arrow -->
       </a></div>
@@ -95,7 +97,10 @@
        تقارير موظفين
         <i class="fa fa-angle-left dropdown"></i>
         <div class="sub-menu">
-          <a href="{{ url('reports/employee') }}" class="sub-item">نسب المكالمات</a>
+         <a href="{{ url('employees/create') }}" class="sub-item">رفع المكالمات الفائتة </a>
+         <a href="{{ url('employees') }}" class="sub-item">تقرير المكالمات  الفائتة</a>
+         
+        <a href="{{ url('calls_parcent') }}" class="sub-item">نسب المكالمات</a>
         </div>
        <!-- dropdown arrow -->
       </a></div>

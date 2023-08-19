@@ -67,10 +67,15 @@ Route::controller(DiscountReportsController::class)->group(function(){
 Route::controller(CustomerController::class)->group(function(){
     Route::get('customers','index');
     Route::get('customers/{customer}', 'show');
+    Route::get('calls', 'calls');
+    Route::post('send_calls_messege/{order}', 'send_calls_messege');
 });
 
 Route::controller(EmployeeReportController::class)->group(function(){
-    Route::get('reports/employee', 'index');
+    Route::get('employees', 'index');
+    Route::get('employees/create', 'create');
+    Route::post('employees/store', 'store');
+    Route::get('calls_parcent', 'calls_parcent');
 });
 
 Route::controller(UserController::class)->group(function(){

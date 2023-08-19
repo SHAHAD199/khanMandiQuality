@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Services\Users\GetUserService;
-use App\Services\Users\PostUserService;
+use App\Services\Users\{
+GetUserService, PostUserService
+};
+
 use Illuminate\Http\Request;
 
 class UserController extends Controller

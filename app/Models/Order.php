@@ -13,6 +13,7 @@ class Order extends Model
         'customer_id',
         'branch_id',
         'city',
+        'send_status',
         'order_type_id',
         'bill',
         'meal',

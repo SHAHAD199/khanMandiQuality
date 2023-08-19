@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Discount;
-use App\Services\Discounts\GetDiscountService;
-use App\Services\Discounts\PostDiscountService;
-use App\Services\Whatsapp;
+use App\Services\{
+   Discounts\GetDiscountService,
+   Discounts\PostDiscountService,
+   Whatsapp
+};
+
 use Illuminate\Http\Request;
 
 class DiscountController extends Controller

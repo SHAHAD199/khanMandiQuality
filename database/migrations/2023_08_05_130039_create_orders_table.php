@@ -17,8 +17,7 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->foreignId('customer_id')->constrained()->onDelete('cascade');
             $table->foreignId('branch_id')->constrained()->onDelete('cascade');
-            $table->date('order_date')->nullable();
-            $table->date('order_type')->nullable();
+            $table->date('order_date')->nullable();           
             $table->boolean('response')->default(0);
             $table->foreignId('order_type_id')->constrained()->onDelete('cascade');
             $table->string('meal')->nullable();

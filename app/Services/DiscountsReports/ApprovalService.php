@@ -2,9 +2,11 @@
 
 namespace App\Services\DiscountsReports;
 
-use App\Models\Branch;
-use App\Models\Customer;
-use App\Models\Discount;
+
+use App\Models\{
+    Branch, Customer, Discount
+};
+
 
 class Approval 
 {

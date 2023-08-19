@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Services\DiscountsReports\{
     Approval, Reject , Used
-
 };
 use Illuminate\Http\Request;
 

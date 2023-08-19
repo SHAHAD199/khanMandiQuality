@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 use App\Models\Order;
-use App\Services\Orders\GetOrderService;
-use App\Services\Orders\PostOrderService;
+use App\Services\Orders\
+{GetOrderService, PostOrderService};
+
 
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
 
-
     private $getOrderService;
     private $postOrderService;
+    
     public function __construct(GetOrderService $getOrderService, PostOrderService $postOrderService)
     {
         $this->getOrderService = $getOrderService;

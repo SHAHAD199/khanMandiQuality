@@ -3,20 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
-use App\Services\Customers\GetCustomerService;
-use App\Services\Customers\PostCustomerService;
+use App\Models\Order;
+use App\Services\Customers\{
+   GetCustomerService, PostCustomerService,
+    ReportsCustomerService
+};
+
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
-
    private $getCustomerService;
-   private $postCustomerService;
+   private $reportsCustomerService;
 
-   public function __construct(GetCustomerService $getCustomerService, PostCustomerService $postCustomerService)
+   public function __construct(GetCustomerService $getCustomerService, ReportsCustomerService $reportsCustomerService)
    {
       $this->getCustomerService  = $getCustomerService;
-      $this->postCustomerService = $postCustomerService;
+      $this->reportsCustomerService = $reportsCustomerService;
    }
     public function index(Request $request)
     {
@@ -28,4 +31,14 @@ class CustomerController extends Controller
     {
       
     }
+
+    public function calls(Request $request)
+    {
+      return $this->reportsCustomerService->index($request);
+    }
+
+    public function send_calls_messege(Order $order,Request $request)
+    {
+     return $this->reportsCustomerService->send_calls_messege($order,$request);
+    }  
 }

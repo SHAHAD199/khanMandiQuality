@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Roles\{
+  GetRoleService,PostRoleService
+};
 
-use App\Services\Roles\GetRoleService;
-use App\Services\Roles\PostRoleService;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller

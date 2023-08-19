@@ -2,9 +2,10 @@
 
 namespace App\Services\Users;
 
-use App\Models\Branch;
-use App\Models\Role;
-use App\Models\User;
+use App\Models\{
+   Branch, Role, User
+};
+
 
 class GetUserService 
 {
