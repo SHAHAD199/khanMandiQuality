@@ -15,7 +15,8 @@ class DiscountStatus
             'customer_id' => $order->customer->id,
             'value'     => $request->value,
             'is_immediately' => 1,
-            'status'    => 2
+            'status'    => 2,
+            'added_by'  => auth()->user()->name
          ]);
         $order->update(['status' => 2]);
         self::send_approval_message($request, $order);
@@ -26,13 +27,11 @@ class DiscountStatus
     {
         $body = '
         مرحبا ست / استاذ '.$order->customer->name.'
+
+نعتذر لكم بالنيابة عن سلسلة مطاعم خان مندي بخصوص طلبكم الاخير ونقدم لكم خصم بقيمة '.$request->value.'% على طلبكم القادم صلاحية استخدام الخصم هي اسبوعين من تاريخ استلام الرسالة
         
-         نعتذر لكم بالنيابة عن سلسلة مطاعم خان مندي بخصوص طلبكم الاخير
-         ونقدم لكم خصم بقيمة '.$request->value.'% على طلبكم القادم
-        صلاحية استخدام الخصم هي اسبوعين من تاريخ استلام الرسالة
-        
-        نتمنى لكم يوم سعيد 
-        عيش التجربة اليمنية#';
+نتمنى لكم يوم سعيد 
+#عيش التجربة اليمنية';
          Whatsapp::send($order->customer->phone , $body);
     }
 

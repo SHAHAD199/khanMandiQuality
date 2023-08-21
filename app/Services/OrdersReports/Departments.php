@@ -16,7 +16,7 @@ class Departments
         $departments = Department::get();
 
         $orders = ($request->branch_id && ($request->start_at && $request->end_at) && $request->department_id)
-        ? Order::whereHas('complaint', function($q) use($request){
+        ? Order::whereHas('complaints', function($q) use($request){
             $q->where('department_id', $request->department_id);
             })->where('branch_id' , $request->branch_id)
             ->whereBetween('order_date', [$request->start_at, $request->end_at])
@@ -28,19 +28,19 @@ class Departments
         })->where('branch_id' , $request->branch_id)->get()
         
         : (($request->department_id &&($request->start_at && $request->end_at))
-        ?  Order::whereHas('complaint',function($q) use($request){
+        ?  Order::whereHas('complaints',function($q) use($request){
             $q->where('department_id', $request->department_id);
         })
         ->whereBetween('order_date', [$request->start_at, $request->end_at])
         ->get()
         : (($request->department_id)
-        ? Order::whereHas('complaint',function($q) use($request){
+        ? Order::whereHas('complaints',function($q) use($request){
             $q->where('department_id', $request->department_id);
         })->get()
         : (($request->branch_id)
-        ? Order::whereHas('complaint')->where('branch_id' , $request->branch_id)->get()
+        ? Order::whereHas('complaints')->where('branch_id' , $request->branch_id)->get()
 
-        : Order::whereHas('complaint')->get()
+        : Order::whereHas('complaints')->get()
 
     ))));
 

@@ -7,10 +7,7 @@ use App\Helpers\Orders\AllArrayFunctions;
 use App\Helpers\Orders\ImmediatelyDiscount;
 use App\Helpers\Orders\NoteStore;
 use App\Helpers\Orders\UpdateCustomer;
-use App\Models\Complaint;
-use App\Models\Customer;
-use App\Models\Discount;
-use App\Models\Note;
+
 use App\Services\Whatsapp;
 
 class PostOrderService
@@ -67,11 +64,10 @@ class PostOrderService
         $body = '
         '.$order->customer->name.'مرحبا ست / استاذ 
         
-        تم استلام الملاحظات المقدمة من قبلكم بخصوص طلبكم الاخير وسيتم العمل عليها 
-        نعتذر لكم بالنيابة عن سلسلة مطاعم خان مندي 
+        تم استلام الملاحظات المقدمة من قبلكم بخصوص طلبكم الاخير وسيتم العمل عليها  نعتذر لكم بالنيابة عن سلسلة مطاعم خان مندي 
         
         نتمنى لكم يوم سعيد 
-        عيش التجربة اليمنية#';
+        #عيش التجربة اليمنية';
         
         Whatsapp::send($order->customer->phone, $body);
         return back();

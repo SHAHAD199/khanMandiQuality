@@ -60,16 +60,16 @@
          <th>الشكاوى</th>
          
     </thead>
-      @foreach($discounts as $discount)
+      @foreach($orders as $order)
       <tbody>
         <td>{{ $index++ }}</td>
-        <td>{{ $discount->order->customer->phone }}</td>
-        <td>{{ $discount->order->order_date }}</td>
-        <td>{{ $discount->order->branch->name}}</td>
-        <td>{{ $discount->order->bill }}</td>
-        <td>{{ $discount->order->orderType->name }}</td>
+        <td>{{ $order->customer->phone }}</td>
+        <td>{{ $order->order_date }}</td>
+        <td>{{ $order->branch->name}}</td>
+        <td>{{ $order->bill }}</td>
+        <td>{{ $order->orderType->name }}</td>
         <td>
-            @if($discount->order->complaint)
+            @if($order->complaints)
             <table class="table table-bordered text-center">
                <thead>
                 <th>القسم</th>
@@ -77,7 +77,7 @@
                 <th>الشكوى</th>
                </thead>
               
-                 @foreach($discount->order->complaint as $complaint)
+                 @foreach($order->complaints as $complaint)
                  <tbody>
                  <td>{{ $complaint->department->name }}</td>
                  <td>{{ $complaint->metarial }}</td>

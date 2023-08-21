@@ -40,8 +40,7 @@ class GetDiscountService
         $branches = Branch::get();
         $discount_value = [10,15,20,25,50,100];
 
-        // if(isset($auth_branch) && $auth_branch == null)
-        // {}
+      
         $orders = ($request->branch_id && ($request->start_at && $request->end_at))
          ?  Order::where('branch_id', $request->branch_id)
          ->where('status',1)
@@ -58,7 +57,7 @@ class GetDiscountService
          ->where('status',1)
          ->whereHas('complaints')->get()
          :(($auth_branch != null) ? Order::where('branch_id' , $auth_branch)->whereHas('complaints') ->get()
-         : Order::whereHas('complaints') ->get()
+         : Order::whereHas('complaints')->where('status', 1)->get()
          )));
  
         return view('discounts/waiting', compact('branches', 'index', 'orders', 'discount_value'));

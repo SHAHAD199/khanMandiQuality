@@ -23,13 +23,11 @@ class OrderImport implements ToModel
         'phone' =>  $row[1]
        ]);
       }
-
-
        Order::create([
          'customer_id'   => Customer::where('phone' , $row[1])->first()->id,
          'branch_id'     => ($row[2] == 'الكرادة') ? 1 : (($row[2] == 'المنصور') ? 2 :  3),
          'city'          => $row[3],
-         'order_date'    => Carbon::parse($row[4])->format('Y-m-d'),
+         'order_date'    => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[4])),
          'order_type_id' => ($row[5] == 'دليفيري') ? 1 : (($row[2] == 'سفري') ? 2 :  3),
          'bill'          => $row[6],
          'meal'          => $row[7],

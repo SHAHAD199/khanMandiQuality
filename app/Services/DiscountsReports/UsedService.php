@@ -7,7 +7,7 @@ use App\Models\{
 };
 
 
-class Used 
+class UsedService
 {
     public function used_discounts($request)
     {

@@ -21,6 +21,7 @@ class CreateDiscountsTable extends Migration
             $table->integer('value')->nullable();
             $table->string('debt')->nullable();
             $table->boolean('is_immediately')->defalt(1);
+            $table->string('added_by', 80);
             $table->boolean('status');
             $table->timestamps();
         });

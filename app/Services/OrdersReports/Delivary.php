@@ -32,7 +32,7 @@ class Delivary
           ->whereBetween('order_date', [$request->start_at, $request->end_at])
           ->get() 
           
-        : Order::whereHas('complaint')->where('order_type_id',1)->get()
+        : Order::whereHas('complaints')->where('order_type_id',1)->get()
           ));
 
         return view('reports.delivary', compact('index', 'branches', 'orders'));

@@ -168,7 +168,7 @@
 
 
 <!-- Img Status -->
-<div class="col-md-6 mt-3" >
+<!-- <div class="col-md-6 mt-3" >
 
 <div class="row form-group">
   <div class="col-md-2"> <label for=""></label> </div>
@@ -179,7 +179,7 @@
    </div>
   </div>
 </div>
-</div> 
+</div>  -->
 <!--End Img Status -->
 
 

@@ -5,13 +5,14 @@ namespace App\Services\EmployeesReports;
 use App\Models\{
     Branch, MissedCall, OrderType
 };
-
+use Illuminate\Support\Facades\DB;
 
 class GetEmployeeReportService 
 {
     public static function  index($request)
     {
-        $missed_calls = ($request->start_at && $request->end_at) ? MissedCall::whereBetween(date('datetime'), [$request->start_at, $request->end_at])->get()
+        $missed_calls = ($request->start_at && $request->end_at) ?
+         MissedCall::whereBetween(DB::raw('DATE(datetime)'), [$request->start_at, $request->end_at])->get()
         : $missed_calls = MissedCall::get();
         $index = 1;
         return view('employees.index', compact('missed_calls', 'index'));

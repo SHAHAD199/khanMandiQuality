@@ -16,7 +16,7 @@ class MissedCallsImport implements ToModel
     {
         MissedCall::create([
            'source'            => $row[1],
-           'datetime'          => Carbon::parse($row[0])->format('Y-m-d H:i'),
+           'datetime'          => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[0])),
            'destination'       => $row[2],
            'number_of_attmpts' => $row[3],
            'status'            => $row[4]

@@ -48,6 +48,7 @@
           <a href="{{ url('excel/add') }}" class="sub-item">اضافة طلبات الامس</a>
           <a href="{{ url('orders') }}" class="sub-item">طلبات الامس</a>
           <a href="{{ url('waiting_list') }}" class="sub-item">قائمة الانتظار</a>
+          <a href="{{ url('notes') }}" class="sub-item">الملاحظات</a>
           <a href="{{ url('calls') }}" class="sub-item">المكالمات الصادرة</a>
 
         </div>

@@ -4,7 +4,6 @@
 
 <div class="heading mb-4 pt-3">
 
-    
      <form action="{{ url('employees') }}" method="get">
        @csrf 
        <div class="row">
@@ -37,12 +36,28 @@
         </div>
         </div>
      </form>
-   
-
 </div>
-<table class="table table-bordered">
- <thead>
-    
+
+<table class="table table-bordered text-center">
+    <tr>
+        <td class="w-50">العدد الكلي</td>
+        <td class="w-50">{{ $missed_calls->count() }}</td>
+    </tr>
+    <tr>
+        <td> عدد الزبائن الضائعة</td>
+        <td>{{ $missed_calls->where('status', 0)->count() }}</td>
+    </tr>
+    <tr>
+        <td> عدد الزبائن الذين تم الاتصال بهم</td>
+        <td>{{ $missed_calls->where('status', 2)->count() }}</td>
+    </tr>
+    <tr>
+        <td> عدد الزبائن الذين عاودوا الاتصال</td>
+        <td>{{ $missed_calls->where('status', 1)->count() }}</td>
+    </tr>
+</table>
+<table class="table table-bordered text-center mt-5">
+ <thead>   
      <th>#</th>
       <th>المصدر</th>
       <th>الوجهة</th>

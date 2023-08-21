@@ -56,6 +56,8 @@
          <th>التاريخ</th>
          <th>الفرع</th>
          <th>الفاتورة</th>
+         <th>قيمة الخصم</th>
+         <th>اسم المستخدم</th>
          <th>نوع الطلب</th>
          <th>الشكاوى</th>
          
@@ -67,9 +69,18 @@
         <td>{{ $discount->order->order_date }}</td>
         <td>{{ $discount->order->branch->name }}</td>
         <td>{{ $discount->order->bill }}</td>
+        <td>
+          @if(!is_null($discount->value))
+          {{ $discount->value }}
+          @else 
+          {{ $discount->debt }}
+          @endif
+
+        </td>
+        <td>{{ $discount->added_by}}</td>
         <td>{{ $discount->order->orderType->name }}</td>
         <td>
-            @if($discount->order->complaint)
+            @if($discount->order->complaints)
             <table class="table table-bordered text-center">
                <thead>
                 <th>القسم</th>
@@ -77,7 +88,7 @@
                 <th>الشكوى</th>
                </thead>
               
-                 @foreach($discount->order->complaint as $complaint)
+                 @foreach($discount->order->complaints as $complaint)
                  <tbody>
                  <td>{{ $complaint->department->name }}</td>
                  <td>{{ $complaint->metarial }}</td>

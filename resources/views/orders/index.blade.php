@@ -4,7 +4,6 @@
 
 <div class="heading mb-4 pt-3">
 
-    
      <form action="{{ url('orders') }}" method="get">
        @csrf 
        <div class="row">
@@ -24,12 +23,16 @@
         <div class="col-md-1">
              <a href="{{ url('orders') }}" class="btn marron-outline-btn"><i class="fa fa-refresh"></i></a>
         </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-2">
+            <p>العدد المتبقي : <span class="btn marron-color">{{ $orders->count() }}</span></p>
+        </div>
         </div>
      </form>
    
 
 </div>
-<table class="table table-bordered">
+<table class="table table-bordered text-center">
  <thead>
     
      <th>#</th>
@@ -57,9 +60,10 @@
     <td>{{ $order->order_date }}</td>
     <td>{{ $order->customer->orders->count() }}</td>
     <td>
-   
+       <i class="fa fa-eye marron-color" onclick="hideShowHistory(this)"></i>
+
         @if($order->customer->orders && !is_null($order->complaints))
-          <table class="table table-bordered">
+          <table class="table table-bordered history d-none">
             <thead>
                 <th>الوجبة</th>
                 <th>التاريخ</th>
@@ -105,4 +109,11 @@
 
  @endforeach
 </table>
+
+<script>
+    function hideShowHistory(eye)
+{
+    console.log($(eye).parent().children('.history').toggleClass('d-none'));
+}
+</script>
 @endsection

@@ -35,6 +35,7 @@ Route::controller(DiscountController::class)->group(function(){
     Route::post('send_birthday_sms', 'send_birthday_sms');
     Route::post('discounts/use_discount', 'use_discount');
     Route::get('waiting_list','waiting_list');
+    Route::get('use_discount/{discount}', 'use_discount');
 });
 
 Route::controller(ExcelController::class)->group(function(){
@@ -45,6 +46,7 @@ Route::controller(ExcelController::class)->group(function(){
 
 Route::controller(OrderController::class)->group(function(){
     Route::get('orders' , 'index');
+    Route::get('notes','notes');
     Route::get('orders/create/{order}','create');
     Route::post('orders/store/{order}','update');
     Route::post('orders/approval/{order}','approval');
@@ -61,7 +63,7 @@ Route::controller(OrdersReportsController::class)->group(function(){
 Route::controller(DiscountReportsController::class)->group(function(){
     Route::get('approval_discounts','approval_discounts');
     Route::get('reject_discounts', 'reject_discounts');
-    Route::get('used_discounts', 'used_discounts');
+   
 });
 
 Route::controller(CustomerController::class)->group(function(){

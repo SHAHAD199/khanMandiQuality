@@ -8,7 +8,7 @@ use App\Models\{
 };
 
 
-class Approval 
+class ApprovalService 
 {
     public static function approval_discounts($request)
     {

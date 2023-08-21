@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\DiscountsReports\{
-    Approval, Reject , Used
+    ApprovalService, RejectService , UsedService
 };
 use Illuminate\Http\Request;
 
@@ -14,7 +14,7 @@ class DiscountReportsController extends Controller
     private $reject;
     private $used;
 
-    public function __construct(Approval $approval, Reject $reject, Used $used)
+    public function __construct(ApprovalService $approval, RejectService $reject, UsedService $used)
     {
         $this->approval = $approval;
         $this->reject   = $reject;

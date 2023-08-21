@@ -23,7 +23,6 @@ class OrderController extends Controller
     public function index(Request $request)
     {
      return $this->getOrderService->index($request);
-
     }
 
     public function create(Order $order)
@@ -37,8 +36,6 @@ class OrderController extends Controller
        return $this->postOrderService->update($order, $request);
     }
 
-   
-
 
     public function approval(Order $order, Request $request)
     {
@@ -48,5 +45,10 @@ class OrderController extends Controller
     public function reject(Order $order)
     {      
         return $this->postOrderService->reject($order);
+    }
+
+    public function notes(Request $request)
+    { 
+        return $this->getOrderService->notes($request);
     }
 }

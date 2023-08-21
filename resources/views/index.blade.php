@@ -44,14 +44,14 @@
         <td>{{ $index++ }}</td>
         <td>{{ $discount->customer->phone }}</td>
         <td>{{ $discount->value }}</td>
-        <td>{{ $discount->order_date }}</td>
+        <td>{{ $discount->order->order_date }}</td>
         <td>{{ $discount->created_at}}</td>
         <td>
                  
                     @if($discount->status == 1)
                     <p class="marron-color"> في قائمة الانتظار</p>
                     @elseif($discount->status == 2)
-                    <form action="{{ url('use_discount') }}">
+                    <form action='{{ url("use_discount/$discount->id") }}'>
                         @csrf 
                         <button class="btn marron-btn">استخدام الخصم</button>
                     </form>

@@ -2,7 +2,7 @@
 @section('content') 
 
 <div class="container py-5">
-<form action="{{ url('waiting_list') }}" >
+<form action="{{ url('notes') }}" >
  @csrf 
 
  <div class="row">
@@ -36,7 +36,7 @@
         <button class="btn marron-btn"><i class="fa fa-search"></i></button>
     </div>
     <div class="col-md-1 my-4">
-    <a class="btn marron-outline-btn" href="{{ url('waiting_list') }}"><i class="fa fa-refresh"></i></a>
+    <a class="btn marron-outline-btn" href="{{ url('notes') }}"><i class="fa fa-refresh"></i></a>
     </div>
  </div>
 </form>
@@ -48,9 +48,7 @@
          <th>التاريخ</th>
          <th>الفرع</th>
          <th>نوع الطلب</th>
-         <th>الشكاوى</th>
-         <th>قبول</th>
-         <th>رفض</th>
+         <th>الملاحظات</th>     
     </thead>
       @foreach($orders as $order)
       <tbody>
@@ -59,50 +57,7 @@
         <td>{{ $order->order_date }}</td>
         <td>{{ $order->branch->name }}</td>
         <td>{{ $order->orderType->name }}</td>
-        <td>
-            @if($order->complaints)
-            <table class="table table-bordered text-center">
-               <thead>
-                <th>القسم</th>
-                <th>الطبق</th>
-                <th>الشكوى</th>
-               </thead>
-              
-                 @foreach($order->complaints as $complaint)
-                 <tbody>
-                 <td>{{ $complaint->department->name }}</td>
-                 <td>{{ $complaint->metarial }}</td>
-                 <td>{{ $complaint->complaint }}</td>
-                 </tbody>
-                 @endforeach
-             
-            </table>
-            @endif
-        </td>
-        <td>
-            <form action='{{ url("orders/approval/$order->id") }}' method="post">
-                @csrf 
-                <div class="row">
-                    <div class="col-md-8">
-                        <select name="value" id="" class="form-control">
-                            <option value="">اختر قيمة</option>
-                            @foreach($discount_value as $value)
-                            <option value="{{ $value }}">{{ $value }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <button class="btn marron-btn">قبول</button>
-                    </div>
-                </div>
-            </form>
-        </td>
-        <td>
-            <form action='{{ url("orders/reject/$order->id") }}' method="post">
-                @csrf 
-                <button class="btn marron-outline-btn">رفض</button>
-            </form>
-        </td>
+        <td>@if($order->note) {{ $order->note->note}}@endif </td>         
       </tbody>
       @endforeach
 </table>
