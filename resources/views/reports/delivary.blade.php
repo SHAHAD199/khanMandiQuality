@@ -59,7 +59,7 @@
         <td>{{ $order->bill }}</td>
         <td>{{ $order->orderType->name }}</td>
         <td>
-            @if($order->complaint)
+            @if($order->complaints)
             <table class="table table-bordered text-center">
                <thead>
                 <th>القسم</th>
@@ -67,7 +67,7 @@
                 <th>الشكوى</th>
                </thead>
               
-                 @foreach($order->complaint as $complaint)
+                 @foreach($order->complaints as $complaint)
                  <tbody>
                  <td>{{ $complaint->department->name }}</td>
                  <td>{{ $complaint->metarial }}</td>

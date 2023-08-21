@@ -2,7 +2,7 @@
 @section('content') 
 
 <div class="container py-5">
-<form action="{{ url('departments') }}" >
+<form action="{{ url('reports/orders') }}" >
  @csrf 
 
  <div class="row">
@@ -31,26 +31,17 @@
             </div>
     </div>
     </div>
-    <div class="col-md-4 my-4">
-    <div class="row">
-            <div class="col-md-2"><label for="">القسم</label></div>
-            <div class="col-md-10">
-                <select name="department_id" class="form-control">
-                  <option value="">اختر قسماً</option>
-                  @foreach($departments as $department)
-                    <option value="{{ $department->id }}">{{ $department->name }}</option>
-                  @endforeach
-                </select>
-            </div>
-    </div>
-    </div>
-
     <div class="col-md-1"></div>
     <div class="col-md-1 my-4">
         <button class="btn marron-btn"><i class="fa fa-search"></i></button>
     </div>
     <div class="col-md-1 my-4">
-    <a class="btn marron-outline-btn" href="{{ url('departments') }}"><i class="fa fa-refresh"></i></a>
+    <a class="btn marron-outline-btn" href="{{ url('reports/orders') }}"><i class="fa fa-refresh"></i></a>
+    </div>
+
+    <div class="col-md-1 my-4">
+    
+    <a class="btn marron-outline-btn" href="{{ url('create_pdf') }}"><i class="fa fa-file-pdf-o"></i></a>
     </div>
  </div>
 </form>
@@ -60,23 +51,23 @@
          <th>#</th>
          <th>الرقم</th>
          <th>التاريخ</th>
-         <th>الفاتورة</th>
-         <th>نوع الطلب</th>
          <th>الفرع</th>
-         <th>الشكاوى</th>
-         
+         <th>نوع الطلب</th>
+         <th>الملاحظات او الشكاوى</th>     
+         <th>الحالة</th>
     </thead>
       @foreach($orders as $order)
       <tbody>
         <td>{{ $index++ }}</td>
         <td>{{ $order->customer->phone }}</td>
         <td>{{ $order->order_date }}</td>
-        <td>{{ $order->bill }}</td>
+        <td>{{ $order->branch->name }}</td>
         <td>{{ $order->orderType->name }}</td>
-        <td>{{ $order->branch->name}}</td>
         <td>
-            @if($order->complaints)
-            <table class="table table-bordered text-center">
+          @if($order->note)
+           {{ $order->note->note}}
+          @elseif($order->complaints)
+          <table class="table table-bordered text-center">
                <thead>
                 <th>القسم</th>
                 <th>الطبق</th>
@@ -92,11 +83,17 @@
                  @endforeach
              
             </table>
-            @endif
+          @endif
+        </td>         
+       <td>
+        @if($order->status == 1) في قائمة الانتظار
+        @elseif($order->status == 2) خصم مقبول
+        @elseif($order->status == 3) خصم مرفوض
+        @elseif($order->status == 4) خصم مستخدم
+        @else لا يوجد خصم
+        @endif
         </td>
-       
-       
-      </tbody>
+        </tbody>
       @endforeach
 </table>
 </div>

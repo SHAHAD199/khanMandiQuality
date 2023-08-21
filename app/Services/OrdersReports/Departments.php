@@ -23,7 +23,7 @@ class Departments
             ->get()
 
         : (($request->branch_id && $request->department_id)
-        ? Order::whereHas('complaint',function($q) use($request){
+        ? Order::whereHas('complaints',function($q) use($request){
              $q->where('department_id', $request->department_id);
         })->where('branch_id' , $request->branch_id)->get()
         

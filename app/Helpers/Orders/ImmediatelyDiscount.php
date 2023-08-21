@@ -14,7 +14,8 @@ class ImmediatelyDiscount
             'is_immediately'  => $request->is_immediately,
             'value'           => $request->value,
             'debt'            => $request->debt,
-            'status'          => 2
+            'status'          => 2,
+            'added_by'        => auth()->user()->name
            ]);
            $order->update(['status' => 2]);
            $body = 'shahad test';

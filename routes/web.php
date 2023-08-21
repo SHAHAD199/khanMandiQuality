@@ -11,8 +11,11 @@ use App\Http\Controllers\{
     RoleController,
     UserController,
 };
-
+use App\Models\Branch;
+use App\Models\Order;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+// use PDF;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +30,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->group(function () {
  
-
 
 Route::controller(DiscountController::class)->group(function(){
     Route::get('/', 'index');  
@@ -58,6 +60,7 @@ Route::controller(OrdersReportsController::class)->group(function(){
     Route::get('delivary','delivary');
     Route::get('takeaway','takeaway');
     Route::get('departments','departments');
+    Route::get('reports/orders', 'index');
 });
 
 Route::controller(DiscountReportsController::class)->group(function(){
@@ -100,3 +103,103 @@ Route::controller(RoleController::class)->group(function(){
 });
 });
 
+
+
+Route::get('create_pdf', function(Request $request){
+    $index = 1;
+   
+
+    $orders = ($request->branch_id && ($request->start_at && $request->end_at))
+    ?  Order::whereHas('complaints' , function($q) use($request) {
+      $q->whereBetween('order_date',[$request->start_at, $request->end_at])->where('branch_id', $request->branch_id);
+    })->orWhereHas('note', function($q) use($request) {
+      $q->whereBetween('order_date',[$request->start_at, $request->end_at])->where('branch_id', $request->branch_id);
+    })->get() 
+      
+    : (($request->branch_id)
+    ? Order::whereHas('complaints' , function($q) use($request) {
+      $q->where('branch_id', $request->branch_id);
+    })->orWhereHas('note', function($q) use($request) {
+      $q->where('branch_id', $request->branch_id);
+    })->get()
+  
+      
+    : (($request->start_at && $request->end_at)
+    ? Order::whereHas('complaints' , function($q) use($request) {
+      $q->whereBetween('order_date',[$request->start_at, $request->end_at]);
+    })->orWhereHas('note', function($q) use($request) {
+      $q->whereBetween('order_date',[$request->start_at, $request->end_at]);
+    })->get() 
+      
+    : Order::whereHas('complaints')->orWhereHas('note')->get()
+      ));
+     
+      $pdf = new \Mpdf\Mpdf();
+      $pdf->showImageErrors = true; 
+  
+      $html ='
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>';
+$html.='
+<body dir="rtl">
+<table class="table table-bordered text-center">
+    <thead>
+         <th>تسلسل</th>
+         <th>الرقم</th>
+         <th>التاريخ</th>
+         <th>الفرع</th>
+         <th>نوع الطلب</th>
+         <th>الملاحظات او الشكاوى</th>     
+         <th>الحالة</th>
+    </thead>';
+
+
+    foreach($orders as $order) :
+          $html.='<tbody>
+               <td>'. $index .'</td>
+               <td>'. $order->customer->phone .'</td>
+               <td>'. $order->order_date .'</td>
+               <td>'. $order->branch->name .'</td>
+               <td>'. $order->orderType->name .'</td>
+               <td>';
+
+          if($order->note) : $order->note->note ;
+          elseif($order->complaints) :
+          $html.='<table class="table table-bordered text-center">
+               <thead>
+                <th>القسم</th>
+                <th>الطبق</th>
+                <th>الشكوى</th>
+               </thead>';
+              
+                 foreach($order->complaints as $complaint) :
+                $html.= '<tbody>
+                 <td>'. $complaint->department->name . '</td>
+                 <td>'. $complaint->metarial .'</td>
+                 <td>' . $complaint->complaint .'</td>
+                 </tbody>';
+                 endforeach;
+             
+           $html.='</table>';
+                endif;
+          $html.='</td>  <td>';
+        if($order->status == 1) :      $html.='في قائمة الانتظار';
+        elseif($order->status == 2) :  $html.='خصم مقبول';
+        elseif($order->status == 3) :  $html.=' خصم مرفوض';
+        elseif($order->status == 4) :  $html.='خصم مستخدم';
+        elseif($order->status == 0) :  $html.='لا يوجد خصم';
+        endif;
+        $html.='</td>
+        </tbody>';
+      endforeach;
+
+      $html.='</table> </body> ';
+      $pdf->WriteHTML($html);
+      $pdf->Output('shahad'. '.' .'pdf' , 'D');
+
+    });

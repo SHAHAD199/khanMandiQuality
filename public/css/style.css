@@ -9,6 +9,7 @@ body{
     min-height: 100vh;
     background-size: cover;
     background-position: center;
+    font-family: "harir";
 }
 .side-bar {
     background: #792d30;

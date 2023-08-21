@@ -59,6 +59,7 @@
        تقارير جودة
         <i class="fa fa-angle-left dropdown"></i>
         <div class="sub-menu">
+          <a href="{{ url('reports/orders') }}" class="sub-item">كل الطلبات</a>
           <a href="{{ url('delivary') }}" class="sub-item">جودة الدليفيري</a>
           <a href="{{ url('takeaway') }}" class="sub-item">جودة السفري</a>
           <a href="{{ url('departments') }}" class="sub-item">جودة الاقسام</a>
