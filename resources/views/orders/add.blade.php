@@ -287,7 +287,6 @@
     $(ss).parent().siblings().children('#material').children('option').remove();
     $(ss).parent().siblings().children('#material').append(
       `
-       
         @foreach(explode('-', $order->additions) as $key=>$addition)
             <option value="{{$key}}">{{ $addition }}</option>
         @endforeach

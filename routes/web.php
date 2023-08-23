@@ -1,5 +1,6 @@
 <?php
 
+use App\Exports\FormExport;
 use App\Http\Controllers\{
     CustomerController,
     DiscountController,
@@ -103,6 +104,10 @@ Route::controller(RoleController::class)->group(function(){
 });
 });
 
+
+Route::get('export_forms',  function (Request $request){
+  return Excel::download(new FormExport, 'forms.xlsx');
+});
 
 
 Route::get('create_pdf', function(Request $request){

@@ -11,6 +11,9 @@ body{
     background-position: center;
     font-family: "harir";
 }
+.marron-bolder {
+    border: 1px solid #792d30;
+}
 .side-bar {
     background: #792d30;
     width:250px;
