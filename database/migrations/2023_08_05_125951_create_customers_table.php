@@ -21,6 +21,7 @@ class CreateCustomersTable extends Migration
             $table->boolean('gender')->nullable();
             $table->date('birthday')->nullable();
             $table->string('email')->unique()->nullable();
+            $table->boolean('birthday_status')->default(0);
             $table->timestamps();
         });
     }

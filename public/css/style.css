@@ -123,14 +123,42 @@ header h1 {
   background-color: #792d30 !important;
 }
 
-  input[type='radio'] {
-    border: 2px solid #792d30;
+  input[type='radio']  {
+    border: 2px solid #792d30 !important;
 }
   input[type='radio']:checked {
-    background-color: #792d30;    
+    background-color: #792d30 !important;    
 }
 
+input[type='checkbox'] {
+    accent-color: #792d30;
+}
 table thead {
     color: #792d30;
     text-align: center;
+}
+
+.state {
+    display: flex;
+    gap: 10px;
+    
+}
+
+.state p {
+    margin-bottom:  0px;
+}
+.state .col-md-3
+{
+  background-color: #792d30;
+  color: #fff;
+  transition: all 1s ease;
+}
+.state .col-md-3:hover
+{
+   background-color: #fff;
+   border: 1px solid #792d30;
+   color:#000;
+}
+.btn:active , .btn:focus {
+    box-shadow: 1px 2px 5px #792d30;
 }

@@ -67,7 +67,7 @@ Route::controller(OrdersReportsController::class)->group(function(){
 Route::controller(DiscountReportsController::class)->group(function(){
     Route::get('approval_discounts','approval_discounts');
     Route::get('reject_discounts', 'reject_discounts');
-   
+    Route::get('used_discounts', 'used_discounts');  
 });
 
 Route::controller(CustomerController::class)->group(function(){
@@ -110,11 +110,9 @@ Route::get('export_forms',  function (Request $request){
 });
 
 
-Route::get('create_pdf', function(Request $request){
-    $index = 1;
-   
+Route::get('create_pdf', function (Request $request){
 
-    $orders = ($request->branch_id && ($request->start_at && $request->end_at))
+  $orders = ($request->branch_id && ($request->start_at && $request->end_at))
     ?  Order::whereHas('complaints' , function($q) use($request) {
       $q->whereBetween('order_date',[$request->start_at, $request->end_at])->where('branch_id', $request->branch_id);
     })->orWhereHas('note', function($q) use($request) {
@@ -138,73 +136,93 @@ Route::get('create_pdf', function(Request $request){
       
     : Order::whereHas('complaints')->orWhereHas('note')->get()
       ));
-     
-      $pdf = new \Mpdf\Mpdf();
-      $pdf->showImageErrors = true; 
-  
-      $html ='
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+         
+           $index = 1;
+           $pdf = new \Mpdf\Mpdf(['mode' => 'UTF-8', 'format' => 'A4-P' , 'autoScriptToLang' => true , 'autoLangToFont' => true]);
+           $pdf->showImageErrors = true;
+          
+          
+           $html ='
+           <head>
+           <style>      
+               
+           </style>
+           </head>';
+           $html.='
+           <body dir="rtl">';
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            $html.='<div>
+                            <table style="width: 100%;margin-bottom: 1rem;; border:1px solid #eee; "
 
-</head>';
-$html.='
-<body dir="rtl">
-<table class="table table-bordered text-center">
-    <thead>
-         <th>تسلسل</th>
-         <th>الرقم</th>
-         <th>التاريخ</th>
-         <th>الفرع</th>
-         <th>نوع الطلب</th>
-         <th>الملاحظات او الشكاوى</th>     
-         <th>الحالة</th>
-    </thead>';
+                            id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                    <th style="padding: 0.75rem 0.4rem;vertical-align: top;border: 1px solid #eee; color:#792d30;">#</th>
+                                    <th style="padding: 0.75rem 0.4rem;vertical-align: top;border: 1px solid #eee; color:#792d30;">الرقم</th>
+                                    <th style="padding: 0.75rem 0.4rem;vertical-align: top;border: 1px solid #eee; color:#792d30;">التاريخ</th>
+                                    <th style="padding: 0.75rem 0.4rem;vertical-align: top;border: 1px solid #eee; color:#792d30;">الفرع</th>
+                                    <th style="padding: 0.75rem 0.4rem;vertical-align: top;border: 1px solid #eee; color:#792d30;">نوع الطلب</th>
+                                    <th style="padding: 0.75rem 0.4rem;vertical-align: top;border: 1px solid #eee; color:#792d30;">الملاحظات او الشكاوى</th>     
+                                    <th style="padding: 0.75rem 0.4rem;vertical-align: top;border: 1px solid #eee; color:#792d30;">الحالة</th>
+                                    </tr>
+                                </thead>
+                                <tbody>';
+                                  foreach($orders as $order):
+                                    $html.='<tr style="border:1px solid #000">
+                                        <td style="padding: 0.75rem 0.4rem;vertical-align: top;border: 1px solid #eee;">'. $index++ .'</td>                                       
+                                        <td style="padding: 0.75rem 0.4rem;vertical-align: top;border: 1px solid #eee;">'. $order->customer->phone.'</td>';  
+                                        $html.='<td style="padding: 0.75rem 0.4rem;vertical-align: top;border: 1px solid #eee;">'. $order->order_date.'</td>';                                    
+                                        $html.='<td style="padding: 0.75rem 0.4rem;vertical-align: top;border: 1px solid #eee;">'. $order->branch->name.'</td>';                                     
+                                        $html.='<td style="padding: 0.75rem 0.4rem;vertical-align: top;border: 1px solid #eee;">'. $order->orderType->name.'</td>';
+                                        $html.='<td style="padding: 0.75rem 0.4rem;vertical-align: top;border: 1px solid #eee;">';
+                                        if($order->note) : $order->note->note ;
+                                        elseif($order->complaints) :
+                                        $html.='<table class="table table-bordered text-center">
+                                             <thead>
+                                              <th style="padding: 0.75rem 0.4rem;vertical-align: top;border: 1px solid #eee;">القسم</th>
+                                              <th style="padding: 0.75rem 0.4rem;vertical-align: top;border: 1px solid #eee;">الطبق</th>
+                                              <th style="padding: 0.75rem 0.4rem;vertical-align: top;border: 1px solid #eee;">الشكوى</th>
+                                             </thead>';
+                                            
+                                               foreach($order->complaints as $complaint) :
+                                              $html.= '<tbody>
+                                               <td style="padding: 0.75rem 0.4rem;vertical-align: top;border: 1px solid #eee;">'. $complaint->department->name . '</td>
+                                               <td style="padding: 0.75rem 0.4rem;vertical-align: top;border: 1px solid #eee;">'. $complaint->metarial .'</td>
+                                               <td style="padding: 0.75rem 0.4rem;vertical-align: top;border: 1px solid #eee;">' . $complaint->complaint .'</td>
+                                               </tbody>';
+                                               endforeach;
+                                           
+                                         $html.='</table>';
+                                        endif;
+                                        $html.='</td>'; 
+                                        $html.='<td style="padding: 0.75rem 0.4rem;vertical-align: top;border: 1px solid #eee;">';
+                                        if($order->status == 1) :      $html.='في قائمة الانتظار';
+                                        elseif($order->status == 2) :  $html.='خصم مقبول';
+                                        elseif($order->status == 3) :  $html.=' خصم مرفوض';
+                                        elseif($order->status == 4) :  $html.='خصم مستخدم';
+                                        elseif($order->status == 0) :  $html.='لا يوجد خصم';
+                                        endif;
+                                        $html.='</td>';             
+                                    $html.='</tr>';
+                                  endforeach;
+                                                              
+                            $html.='</tbody>
+                            </table>
+                
+     </div>
+    </body>
+           ';
+           $pdf->WriteHTML($html);
+           $pdf->Output('orders'.time(). '.' .'pdf' , 'D');
+});
 
 
-    foreach($orders as $order) :
-          $html.='<tbody>
-               <td>'. $index .'</td>
-               <td>'. $order->customer->phone .'</td>
-               <td>'. $order->order_date .'</td>
-               <td>'. $order->branch->name .'</td>
-               <td>'. $order->orderType->name .'</td>
-               <td>';
 
-          if($order->note) : $order->note->note ;
-          elseif($order->complaints) :
-          $html.='<table class="table table-bordered text-center">
-               <thead>
-                <th>القسم</th>
-                <th>الطبق</th>
-                <th>الشكوى</th>
-               </thead>';
-              
-                 foreach($order->complaints as $complaint) :
-                $html.= '<tbody>
-                 <td>'. $complaint->department->name . '</td>
-                 <td>'. $complaint->metarial .'</td>
-                 <td>' . $complaint->complaint .'</td>
-                 </tbody>';
-                 endforeach;
-             
-           $html.='</table>';
-                endif;
-          $html.='</td>  <td>';
-        if($order->status == 1) :      $html.='في قائمة الانتظار';
-        elseif($order->status == 2) :  $html.='خصم مقبول';
-        elseif($order->status == 3) :  $html.=' خصم مرفوض';
-        elseif($order->status == 4) :  $html.='خصم مستخدم';
-        elseif($order->status == 0) :  $html.='لا يوجد خصم';
-        endif;
-        $html.='</td>
-        </tbody>';
-      endforeach;
 
-      $html.='</table> </body> ';
-      $pdf->WriteHTML($html);
-      $pdf->Output('shahad'. '.' .'pdf' , 'D');
 
-    });
+
+
+
+
+
+   

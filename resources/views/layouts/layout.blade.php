@@ -44,7 +44,6 @@
        الجودة
         <i class="fa fa-angle-left dropdown"></i>
         <div class="sub-menu">
-          <a href="{{ url('birthday') }}" class="sub-item">اعياد الميلاد</a>
           <a href="{{ url('excel/add') }}" class="sub-item">اضافة طلبات الامس</a>
           <a href="{{ url('orders') }}" class="sub-item">طلبات الامس</a>
           <a href="{{ url('waiting_list') }}" class="sub-item">قائمة الانتظار</a>

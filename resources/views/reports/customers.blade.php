@@ -6,10 +6,11 @@
      {
         display: flex;       
         justify-content: center;
-        min-height: 80vh;
+        height: 600px;
         width: 70vw;
         position: fixed;
         top: 10%; 
+        overflow: auto !important;
         background: #fff;
         margin: auto;      
     }
@@ -104,8 +105,8 @@
         </td>
         
         <td>
-        <a href="#" class="btn marron-btn" onclick="info(this)">التفاصيل</a>
-
+        <a href="#" class="btn marron-btn" onclick="info(this, <?php echo $customer->id; ?>)">التفاصيل</a>
+        <input class="customer_hidden" name="customer_hidden" type="hidden" value="{{ $customer->id }}">
  </td>
       </tbody>
       @endforeach
@@ -118,82 +119,123 @@
 
 
 <script>
-    function info(e)
+    function info(e,customer)
     {
-       
-   $('.test').append(
+//    document.cookie = "id =" + customer;
+
+
+$('.test').append(
 `
+
+@php
+$dd = $_COOKIE['id'];
+$customer = App\Models\Customer::find($dd);
+@endphp
 <div id="info-div" class="marron-bolder">
 <div class="model">
 <div class="d-flex my-4 justify-content-between">
    <h2>اضافة زبون</h2>
-   <button class="btn marron-btn"><i class="fa fa-times"></i></button>
+ 
+   <button class="btn marron-btn" onclick="closeInfo(this)"><i class="fa fa-times"></i></button>
 </div>
 <table class="table table-bordered text-center">
-    <thead>
-         <th>الاسم</th>
-         <th>الرقم</th>
-         <th>الطلبات</th>    
-
-    </thead>
-    <tbody>
+ <tr>
+  <td class="w-50">عدد الطلبات الكلي</td>
+  <td class="w-50">{{$customer->orders->count() }}</td>
+ </tr>
+ <tr>
+  <td>عدد الخصومات المقبولة </td>
+  <td>{{$customer->orders->where('status', 2)->count() }}</td>
+ </tr>
+ <tr>
+  <td>عدد  الخصومات المستخدمة</td>
+  <td>{{$customer->orders->where('status', 4)->count() }}</td>
+ </tr>
+ <tr>
+  <td>عدد الشكاوى المرفوضة </td>
+  <td>{{$customer->orders->where('status', 3)->count() }}</td>
+ </tr>
+</table>
+<table class="table table-bordered text-center">
+ <thead>
+  <th>الإسم</th>
+  <th>الرقم</th>
+  <th>الطلبات</th>
+ </thead>
+ <tbody>
       <td>{{ $customer->name }}</td>
       <td>{{ $customer->phone }}</td>
       <td>
-      <table>
-
-         <thead>
+        <table class="table table-bordered text-center">
+          <thead>
               <th>التاريخ</th>
               <th>نوع الطلب</th>
               <th>الفرع</th>
               <th>الشكاوى او الملاحظات</th>
-         </thead>
-
-         @foreach($customer->orders as $order)
-         <tbody>
+              <th>الخصومات</th>
+          </thead>
+          @foreach($customer->orders as $order)
+          <tbody>
              <td>{{ $order->order_date }}</td>          
              <td>{{ $order->orderType->name }}</td>
              <td>{{ $order->branch->name}}</td>
              <td>
-             @if($order->complaints)
-            <table class="table table-bordered text-center">
-               <thead>
+              @if($order->complaints)
+              <table  class="table table-bordered text-center">
+              <thead>
                 <th>القسم</th>
                 <th>الطبق</th>
                 <th>الشكوى</th>
                </thead>
-              
-                 @foreach($order->complaints as $complaint)
-                 <tbody>
+
+               @foreach($order->complaints as $complaint)
+               <tbody>
                  <td>{{ $complaint->department->name }}</td>
                  <td>{{ $complaint->metarial }}</td>
                  <td>{{ $complaint->complaint }}</td>
                  </tbody>
-                 @endforeach
-             
-            </table>
-            @endif
+               @endforeach
+              </table>
+       
+              @endif
              </td>
-
-        </tbody>
-         @endforeach
-      </table>
-      
+             <td>
+              <table class="table table-bordered text-center">
+              @if($order->discount)
+                <thead>
+                  <th>قيمة الخصم</th>
+                  <th>تاريخ اعطاء الخصم</th>
+                  <th>تاريخ الاستخدام</th>
+                  <th>الحساب</th>
+                </thead>
+     
+                <tbody>
+                  <td>@if(!is_null($order->discount->value)) {{ $order->discount->value }}@else {{ $order->discount->debt }} @endif</td>
+                  <td>{{ $order->discount->created_at }}</td>
+                  <td>{{ $order->discount->date_use }}</td>
+                  <td>{{ $order->discount->added_by }}</td>
+                </tbody>
+                
+                @else لا يوجد خصم
+                @endif
+              </table>
+             </td>
+          </tbody>
+          @endforeach
+        </table>
       </td>
-    </tbody>
-      
+ </tbody>
 </table>
 </div>
 </div>
 `
    );
 
-
-      
-       }
-    function closeInfo()
+ }
+    function closeInfo(ss)
     {
-        $('.test').append().remove();
+        // $(ss).parents().parents().append().remove();
+       $(ss).parents().parents().parents('#info-div').append().remove();
     }
 </script>
 @endsection

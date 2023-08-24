@@ -38,24 +38,35 @@
      </form>
 </div>
 
-<table class="table table-bordered text-center">
-    <tr>
-        <td class="w-50">العدد الكلي</td>
-        <td class="w-50">{{ $missed_calls->count() }}</td>
-    </tr>
-    <tr>
-        <td> عدد الزبائن الضائعة</td>
-        <td>{{ $missed_calls->where('status', 0)->count() }}</td>
-    </tr>
-    <tr>
-        <td> عدد الزبائن الذين تم الاتصال بهم</td>
-        <td>{{ $missed_calls->where('status', 2)->count() }}</td>
-    </tr>
-    <tr>
-        <td> عدد الزبائن الذين عاودوا الاتصال</td>
-        <td>{{ $missed_calls->where('status', 1)->count() }}</td>
-    </tr>
-</table>
+
+
+   <div class="state-section mb-5">
+    <div class="container">
+        <div class="state">
+    
+        <div class="col-md-3 marron-bolder rounded d-flex justify-content-between align-items-center  py-3 px-2">
+            <p>عدد الطلبات الكلي</p>
+            <p>{{ $missed_calls->count() }}</p>
+        </div>
+
+        <div class="col-md-3 marron-bolder rounded d-flex justify-content-between align-items-center  py-3 px-2">
+           <p>عدد  الزبائن الضائعة </p>
+           <p>{{ $missed_calls->where('status', 0)->count() }}</p>
+        </div>
+        <div class="col-md-3 marron-bolder rounded d-flex justify-content-between align-items-center  py-3 px-2">
+          <p>عدد  الزبائن الذين تم الاتصال بهم </p>
+          <p>{{ $missed_calls->where('status', 2)->count() }}</p>
+        </div>
+        <div class="col-md-3 marron-bolder rounded d-flex justify-content-between align-items-center  py-3 px-2">
+          <p>عدد الزبائن الذين عاودو الاتصال </p>
+         <p>{{ $missed_calls->where('status', 1)->count() }}</p>
+        </div>
+        </div>
+        </div>
+</div>
+
+
+
 <table class="table table-bordered text-center mt-5">
  <thead>   
      <th>#</th>

@@ -44,8 +44,15 @@
         <td>{{ $index++ }}</td>
         <td>{{ $discount->customer->phone }}</td>
         <td>{{ $discount->value }}</td>
-        <td>{{ $discount->order->order_date }}</td>
-        <td>{{ $discount->created_at}}</td>
+        <td>
+            @if($discount->order)
+            {{ Carbon\Carbon::parse($discount->order->order_date)->format('Y-m-d')  }}
+            @endif
+        </td>
+        <td>
+        {{ Carbon\Carbon::parse($discount->created_at)->format('Y-m-d')}}
+           
+        </td>
         <td>
                  
                     @if($discount->status == 1)
@@ -53,6 +60,9 @@
                     @elseif($discount->status == 2)
                     <form action='{{ url("use_discount/$discount->id") }}'>
                         @csrf 
+                        @if($discount->customer && $discount->customer->where('birthday_status', '1'))
+                        <p class="text">سبب الخصم : عيد ميلاد</p>   
+                        @endif
                         <button class="btn marron-btn">استخدام الخصم</button>
                     </form>
                     @elseif($discount->status == 3)

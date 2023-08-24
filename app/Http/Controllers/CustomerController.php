@@ -29,7 +29,7 @@ class CustomerController extends Controller
 
     public function show(Customer $customer)
     {
-      
+      return $this->getCustomerService->show($customer);
     }
 
     public function calls(Request $request)

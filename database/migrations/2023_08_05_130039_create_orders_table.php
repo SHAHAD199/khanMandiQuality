@@ -28,6 +28,7 @@ class CreateOrdersTable extends Migration
             $table->string('additions')->nullable();
             $table->string('appetizers')->nullable();
             $table->boolean('status')->default(0);
+            $table->boolean('send_status')->default(0);
             $table->boolean('add_status')->default(0);
             $table->boolean('call_status')->default(0);
             $table->string('added_by')->nullable();

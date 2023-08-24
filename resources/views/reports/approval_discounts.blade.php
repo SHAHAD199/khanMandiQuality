@@ -59,16 +59,26 @@
          <th>قيمة الخصم</th>
          <th>اسم المستخدم</th>
          <th>نوع الطلب</th>
-         <th>الشكاوى</th>
+         <th>السبب</th>
          
     </thead>
       @foreach($discounts as $discount)
       <tbody>
         <td>{{ $index++ }}</td>
-        <td>{{ $discount->order->customer->phone }}</td>
-        <td>{{ $discount->order->order_date }}</td>
-        <td>{{ $discount->order->branch->name }}</td>
-        <td>{{ $discount->order->bill }}</td>
+        <td>{{ $discount->customer->phone }}</td>
+        <td>
+          @if($discount->order)
+          {{ $discount->order->order_date }}
+          @endif
+        </td>
+        <td>
+          @if($discount->order)
+          {{ $discount->order->branch->name }}</td>
+          @endif
+        <td>
+          @if($discount->order)
+          {{ $discount->order->bill }}</td>
+          @endif
         <td>
           @if(!is_null($discount->value))
           {{ $discount->value }}
@@ -78,8 +88,13 @@
 
         </td>
         <td>{{ $discount->added_by}}</td>
-        <td>{{ $discount->order->orderType->name }}</td>
         <td>
+          @if($discount->order)
+          {{ $discount->order->orderType->name }}
+          @endif
+        </td>
+        <td>
+          @if($discount->order)
             @if($discount->order->complaints)
             <table class="table table-bordered text-center">
                <thead>
@@ -98,6 +113,9 @@
              
             </table>
             @endif
+          @elseif($discount->customer && $discount->customer->where('birthday_status', '1'))
+          عيد ميلاد
+          @endif
         </td>
        
        

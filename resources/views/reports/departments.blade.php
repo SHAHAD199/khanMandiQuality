@@ -101,13 +101,92 @@
 </table>
 </div>
 
+<table>
+ <tr>
+  <td>عدد الطلبات الكلي</td>
+  <td>{{$customer->orders->count() }}</td>
+ </tr>
+ <tr>
+  <td>عدد الخصومات المقبولة </td>
+  <td>{{$customer->orders->where('status', 2)->count() }}</td>
+ </tr>
+ <tr>
+  <td>عدد  الخصومات المستخدمة</td>
+  <td>{{$customer->orders->where('status', 4)->count() }}</td>
+ </tr>
+ <tr>
+  <td>عدد الشكاوى المرفوضة </td>
+  <td>{{$customer->orders->where('status', 3)->count() }}</td>
+ </tr>
+</table>
+<table class="table table-bordered text-center">
+ <thead>
+  <th>الإسم</th>
+  <th>الرقم</th>
+  <th>الطلبات</th>
+ </thead>
+ <tbody>
+      <td>{{ $customer->name }}</td>
+      <td>{{ $customer->phone }}</td>
+      <td>
+        <table class="table table-bordered text-center">
+          <thead>
+              <th>التاريخ</th>
+              <th>نوع الطلب</th>
+              <th>الفرع</th>
+              <th>الشكاوى او الملاحظات</th>
+              <th>الخصومات</th>
+          </thead>
+          @foreach($customer->orders as $order)
+          <tbody>
+             <td>{{ $order->order_date }}</td>          
+             <td>{{ $order->orderType->name }}</td>
+             <td>{{ $order->branch->name}}</td>
+             <td>
+              @if($order->complaints)
+              <table  class="table table-bordered text-center">
+              <thead>
+                <th>القسم</th>
+                <th>الطبق</th>
+                <th>الشكوى</th>
+               </thead>
 
-
-
-
-
-
-
-
+               @foreach($order->complaints as $complaint)
+               <tbody>
+                 <td>{{ $complaint->department->name }}</td>
+                 <td>{{ $complaint->metarial }}</td>
+                 <td>{{ $complaint->complaint }}</td>
+                 </tbody>
+               @endforeach
+              </table>
+       
+              @endif
+             </td>
+             <td>
+              <table class="table table-bordered text-center">
+              @if($order->discounts)
+                <thead>
+                  <th>قيمة الخصم</th>
+                  <th>تاريخ اعطاء الخصم</th>
+                  <th>تاريخ الاستخدام</th>
+                  <th>الحساب</th>
+                </thead>
+                @foreach($order->discounts as $discount)
+                <tbody>
+                  <td>@if(!is_null($discount->value)) {{ $discount->value }}@else {{ $discount->debt }} @endif</td>
+                  <td>{{ $discount->created_at }}</td>
+                  <td>{{ $discount->date_use }}</td>
+                  <td>{{ $discount->added_by }}</td>
+                </tbody>
+                @endforeach
+                @endif
+              </table>
+             </td>
+          </tbody>
+          @endforeach
+        </table>
+      </td>
+ </tbody>
+</table>
 
 @endsection

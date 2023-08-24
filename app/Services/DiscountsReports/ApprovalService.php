@@ -36,6 +36,8 @@ class ApprovalService
         :(($request->phone) ?  Discount::where('status', 2)
         ->whereHas('order', function($q) use($request){
             $q->where('customer_id', Customer::where('phone', $request->phone)->first()->id );
+        })->orWhereHas('customer', function($q) use($request){
+            $q->where('customer_id', Customer::where('phone', $request->phone)->first()->id );
         })->get()
         : Discount::where('status', 2)->get()       
     )));
