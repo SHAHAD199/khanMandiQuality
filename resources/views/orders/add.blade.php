@@ -14,9 +14,10 @@
 
  <div class="row justify-content-center mt-5">
     <div class="col-md-9">
-        <div class="card">
-            <div class="card-header" >
+        <div class="card p-3">
+            <div class="d-flex justify-content-between" >
             <h4 >استبيان</h4>   
+            <a href="{{ url('orders') }}" class="btn marron-btn">عودة</a>
            </div>
 <div class="card-body">
 <form  method="POST" action='{{ url("orders/store/$order->id")}}'>

@@ -147,13 +147,13 @@ table thead {
 .state p {
     margin-bottom:  0px;
 }
-.state .col-md-3
+.state .col-md-3,.state .col-md-4
 {
   background-color: #792d30;
   color: #fff;
   transition: all 1s ease;
 }
-.state .col-md-3:hover
+.state .col-md-3:hover , .state .col-md-4:hover
 {
    background-color: #fff;
    border: 1px solid #792d30;

@@ -3,9 +3,9 @@
 namespace App\Services\OrdersReports;
 
 use App\Models\{
-    Branch, Order
+    Branch, Complaint, Department, Order
 };
-
+use App\Services\Orders\PdfOrderService;
 
 class AllOrders 
 {
@@ -14,32 +14,68 @@ class AllOrders
  
         $index = 1;
         $branches = Branch::get();
+        $departments = Department::get();
 
-        $orders = ($request->branch_id && ($request->start_at && $request->end_at))
-        ?  Order::whereHas('complaints' , function($q) use($request) {
-          $q->whereBetween('order_date',[$request->start_at, $request->end_at])->where('branch_id', $request->branch_id);
-        })->orWhereHas('note', function($q) use($request) {
-          $q->whereBetween('order_date',[$request->start_at, $request->end_at])->where('branch_id', $request->branch_id);
-        })->get() 
-          
-        : (($request->branch_id)
-        ? Order::whereHas('complaints' , function($q) use($request) {
-          $q->where('branch_id', $request->branch_id);
-        })->orWhereHas('note', function($q) use($request) {
-          $q->where('branch_id', $request->branch_id);
-        })->get()
-      
-          
-        : (($request->start_at && $request->end_at)
-        ? Order::whereHas('complaints' , function($q) use($request) {
-          $q->whereBetween('order_date',[$request->start_at, $request->end_at]);
-        })->orWhereHas('note', function($q) use($request) {
-          $q->whereBetween('order_date',[$request->start_at, $request->end_at]);
-        })->get() 
-          
-        : Order::whereHas('complaints')->orWhereHas('note')->get()
-          ));
+           
+          $start_at = $request->start_at;
+          $end_at = $request->end_at;
+          $branch_id = $request->branch_id;
 
-        return view('reports.all_orders', compact('index', 'branches', 'orders'));
+
+      switch([$start_at, $end_at,$branch_id]){
+         case isset($start_at) && isset($end_at) && isset($branch_id)  : 
+          
+          $orders =  Order::whereHas('complaints' , function($q) use($start_at, $end_at, $branch_id) {
+            $q->whereBetween('order_date',[$start_at, $end_at])->where('branch_id', $branch_id);
+          })->orWhereHas('note', function($q) use($start_at, $end_at, $branch_id) {
+            $q->whereBetween('order_date',[$start_at, $end_at])->where('branch_id', $branch_id);
+          })->get();
+
+         $complaints = Complaint::whereHas('order', function($q) use($start_at, $end_at, $branch_id){
+            $q->whereBetween('order_date', [$start_at, $end_at])->where('branch_id', $branch_id);
+          })->get();
+          break;
+
+          case($start_at && $end_at) :
+            $orders =  Order::whereHas('complaints' , function($q) use($start_at, $end_at, $branch_id) {
+              $q->whereBetween('order_date',[$start_at, $end_at]);
+            })->orWhereHas('note', function($q) use($start_at,$end_at) {
+              $q->whereBetween('order_date',[$start_at, $end_at]);
+            })->get();
+
+            $complaints  = Complaint::whereHas('order', function($q) use($start_at,$end_at){
+              $q->whereBetween('order_date', [$start_at, $end_at]);
+            })->get();
+
+           break;
+          case($branch_id) :
+            Order::whereHas('complaints' , function($q) use($branch_id) {
+              $q->where('branch_id', $branch_id);
+            })->orWhereHas('note', function($q) use($branch_id) {
+              $q->where('branch_id', $branch_id);
+            })->get();
+
+            $complaints = Complaint::whereHas('order', function($q) use($branch_id){
+              $q->where('branch_id', $branch_id);
+            })->get();
+            break;
+
+            default :
+            $orders = Order::whereHas('complaints')->orWhereHas('note')->get();
+            $complaints = Complaint::get();
+       
+        }
+
+
+        if($request->input('action') == 'orders') {
+          return view('reports.all_orders', compact('index', 'branches', 'orders' , 'start_at', 'end_at','branch_id','complaints','departments'));
+        }else if($request->input('action') == 'pdf'){
+          PdfOrderService::create_content($orders ,$complaints);
+        }
+        else {
+          return view('reports.all_orders', compact('index', 'branches', 'orders' , 'start_at', 'end_at','branch_id','complaints','departments'));
+        }
+
+       
     }
 }

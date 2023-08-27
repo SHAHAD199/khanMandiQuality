@@ -17,7 +17,12 @@ class GetDiscountService
         $discounts = Discount::whereHas('customer', function($q) use($request) 
         {
         $q->where('phone', $request->phone);
-        })->get();
+        })->orWhereHas('order', function($q) use($request){
+        $q->whereHas('customer', function($q) use($request){
+            $q->where('phone', $request->phone);
+        });
+        })       
+        ->get();
         return view('index' , compact('index', 'discounts'));      
         }
         else {

@@ -42,7 +42,10 @@
       @foreach($discounts as $discount)
       <tbody>
         <td>{{ $index++ }}</td>
-        <td>{{ $discount->customer->phone }}</td>
+        <td>@if($discount->customer){{ $discount->customer->phone }}
+            @elseif($discount->order){{ $discount->order->customer->phone }}
+            @endif
+        </td>
         <td>{{ $discount->value }}</td>
         <td>
             @if($discount->order)
@@ -60,7 +63,7 @@
                     @elseif($discount->status == 2)
                     <form action='{{ url("use_discount/$discount->id") }}'>
                         @csrf 
-                        @if($discount->customer && $discount->customer->where('birthday_status', '1'))
+                        @if($discount->customer)
                         <p class="text">سبب الخصم : عيد ميلاد</p>   
                         @endif
                         <button class="btn marron-btn">استخدام الخصم</button>

@@ -9,13 +9,26 @@
     <div class="col-md-4 ">
          <div class="row">
             <div class="col-md-2"><label for="">بداية التاريخ</label></div>
-            <div class="col-md-10"><input type="date" name="start_at" class="form-control"></div>
+            <div class="col-md-10">
+              @if($start_at)
+              <input type="date" name="start_at" class="form-control" value="{{ $start_at }}">
+
+              @else
+              <input type="date" name="start_at" class="form-control">
+              @endif
+            </div>
          </div>
     </div>
     <div class="col-md-4">
     <div class="row">
             <div class="col-md-2"><label for="">نهاية التاريخ</label></div>
-            <div class="col-md-10"><input type="date" name="end_at" class="form-control"></div>
+            <div class="col-md-10">
+              @if($end_at)
+              <input type="date" name="end_at" class="form-control" value="{{ $end_at }}">
+              @else
+              <input type="date" name="end_at" class="form-control">
+              @endif
+            </div>
     </div>
     </div>
     <div class="col-md-4">
@@ -23,17 +36,27 @@
             <div class="col-md-2"><label for="">الفرع</label></div>
             <div class="col-md-10">
                 <select name="branch_id" class="form-control">
-                  <option value="">اختر فرعاً</option>
+                  @if($branch_id)
+                  <option value="{{ $branch_id }}">{{ App\Models\Branch::where('id', $branch_id)->first()->name }}</option>
+                
+                  <!-- <option value="">اختر فرعاً</option> -->
                   @foreach($branches as $branch)
                     <option value="{{ $branch->id }}">{{ $branch->name }}</option>
                   @endforeach
+
+                  @else 
+                   <option value="">اختر فرعاً</option>
+                   @foreach($branches as $branch)
+                    <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+                  @endforeach
+                  @endif
                 </select>
             </div>
     </div>
     </div>
     <div class="col-md-1"></div>
     <div class="col-md-1 my-4">
-        <button class="btn marron-btn"><i class="fa fa-search"></i></button>
+        <button class="btn marron-btn" name="action" value="orders"><i class="fa fa-search"></i></button>
     </div>
     <div class="col-md-1 my-4">
     <a class="btn marron-outline-btn" href="{{ url('reports/orders') }}"><i class="fa fa-refresh"></i></a>
@@ -41,10 +64,33 @@
 
     <div class="col-md-1 my-4">
     
-    <a class="btn marron-outline-btn" href="{{ url('create_pdf') }}"><i class="fa fa-file-pdf-o"></i></a>
+    <button class="btn marron-outline-btn" name="action" value="pdf"><i class="fa fa-file-pdf-o"></i></button>
     </div>
  </div>
 </form>
+
+<div class="state-section mb-5">
+    <div class="container">
+        <div class="state">
+    
+        <div class="col-md-4 marron-bolder rounded d-flex justify-content-between align-items-center  py-3 px-2">
+            <p>عدد الطلبات الكلي</p>
+            <p>{{ $orders->count() }}</p>
+        </div>
+
+        <div class="col-md-4 marron-bolder rounded d-flex justify-content-between align-items-center  py-3 px-2">
+           <p> عدد الشكاوى</p>
+           <p>{{ $orders->whereIn('status', [1,2,3,4])->count() }}</p>
+        </div>
+        <div class="col-md-4 marron-bolder rounded d-flex justify-content-between align-items-center  py-3 px-2">
+          <p> عدد الملاحظات الايجابية </p>
+          <p>{{ $orders->where('status', 0)->count() }}</p>
+        </div>
+   
+        </div>
+        </div>
+</div>
+
 
 <table class="table table-bordered text-center">
     <thead>

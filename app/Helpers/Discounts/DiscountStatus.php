@@ -12,7 +12,6 @@ class DiscountStatus
     {
         Discount::create([
             'order_id'  => $order->id,
-            'customer_id' => $order->customer->id,
             'value'     => $request->value,
             'is_immediately' => 1,
             'status'    => 2,
