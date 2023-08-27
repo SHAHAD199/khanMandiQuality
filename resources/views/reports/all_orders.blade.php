@@ -91,6 +91,25 @@
         </div>
 </div>
 
+<div class="container">
+  <div class="my-5">
+
+       <p>احصائيات الاقسام</p>
+     
+       <div class="row">          
+              @foreach($departments as $department) 
+              <div class="col-md-4 marron-bolder rounded d-flex justify-content-between align-items-center py-3 px-2">
+                  <p> {{$department->name}}</p>
+                  <p> {{ $complaints->where('department_id', $department->id)->count() }} </p>
+              </div>
+              @endforeach
+         </div>
+      
+   
+              
+         </div>
+  </div>
+
 
 <table class="table table-bordered text-center">
     <thead>
